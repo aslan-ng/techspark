@@ -1,55 +1,7 @@
-weekdays_abreviations = {
-    "Monday": "M",
-    "Tuesday": "T",
-    "Wednesday": "W",
-    "Thursday": "R",
-    "Friday": "F",
-    "Saturday": "S",
-    "Sunday": "U",
-}
-
-
-def create_embedding(text: str):
-    return None
-
-class Instructor:
-
-    def __init__(
-        self,
-        name: str,
-        role: str,
-        description: str = "",
-        embedding = None,
-    ):
-        self.name = name
-        self.role = role
-        self.description = description
-        self.embedding = embedding
-
-    def create_embedding(self):
-        text = f"role: {self.role}"
-        if self.description:
-            text += f"\ndescription: {self.description}"
-        self.embedding = create_embedding()
-
-
-class InstructorManager:
-
-    def __init__(self):
-        self.instructors = []
-
-    def add(self, instructor: Instructor):
-        self.instructors.append(instructor)
-
-    def find_by_name(self, name: str):
-        return None  #####
-    
-    def find_by_role(self, role: str):
-        return None #####
-    
-    def find_by_description(self, description: str):
-        description_embedding = create_embedding(description)
-        return None #####
+from techspark.embedding import create_embedding
+from techspark.instructor import Instructor
+from techspark.class_object import Class
+from techspark.match import match_items
 
 
 class Course:
@@ -86,20 +38,30 @@ class Course:
     def reset_classes(self):
         self.classes = []
 
+    def search_classes_by_name(self, name: str, threshold=0.6, num_results=None):
+        result = []
+        classes = [class_instance.title for class_instance in self.classes]
+        matches = match_items(name, classes, threshold=threshold, num_results=num_results)
+        for match in matches:
+            result.append(self.classes[match["index"]])
+        return result
 
-class Class():
 
-    def __init__(
-            self,
-            instructor: str,
-            section,
-            schedule,
-            semester
-        ):
-        self.instructor = instructor
-        self.section = section
-        self.schedule = schedule
-        self.semester = semester
+class CourseManager:
+
+    def __init__(self):
+        self.courses = []
+
+    def add(self, course: Course):
+        self.courses.append(course)
+
+    def search_classes_by_name(self, name: str, threshold=0.6, num_results=None):
+        result = []
+        classes = [class_instance.title for class_instance in self.classes]
+        matches = match_items(name, classes, threshold=threshold, num_results=num_results)
+        for match in matches:
+            result.append(self.classes[match["index"]])
+        return result
 
 
 if __name__ == "__main__":
